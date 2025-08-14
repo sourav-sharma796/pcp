@@ -861,6 +861,8 @@ __pmGetDate(struct timespec *result, const char *p, struct timespec const *now)
 			yp.yyMeridian, yp.yyDSTmode);
 	if (Start < 0)
 	    return -1;
+    } else if (yp.yyHaveZone && (!yp.yyHaveTime || !yp.yyHaveDate || !yp.yyHaveDay || !yp.yyMonth || !yp.yyYear || !yp.yyHour || !yp.yyMinutes || !yp.yySeconds)) {
+       return -2;
     }
     else {
 	Start = now->tv_sec;

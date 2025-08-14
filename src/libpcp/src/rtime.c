@@ -685,9 +685,15 @@ __pmtimespecParse(
 
     /* datetime is not recognised, try the glib_get_date method */
     parseChar(&scan, '@');	/* ignore; glib_relative_date determines type */
-    if (glib_get_date(scan, &start, &end, rslt) < 0)
-	return -1;
-
+    int ret;
+    if ((ret = glib_get_date(scan, &start, &end, rslt)) < 0) {
+        if(ret == -2) {
+          if (*scan != '\0') {
+               parseError(scan, scan, "Invalid format: please provide date/time or interval", errMsg);
+          }
+       }
+        return -1;
+    }
     /*
      * glib_get_date() worked, and we're going to return success
      * so cleanup *errMsg
